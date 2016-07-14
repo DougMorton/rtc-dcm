@@ -81,8 +81,9 @@ function gotIceCandidate(event) {
     console.log('gotIceCandidate');
     
     if (!event || !event.candidate) return;
+    /*
     serverConnection.emit("iceCandidate", event.candidate); //send ice candidate through your signaling server to other peer
-    
+    */
     if(event.candidate != null) {
         serverConnection.send(JSON.stringify({'ice': event.candidate, 'uuid': uuid}));
     }
