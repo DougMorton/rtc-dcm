@@ -1,14 +1,6 @@
-//var HTTPS_PORT = 8443;
-
 var fs = require('fs');
-var https = require('https');
+var http = require('http');
 var WebSocketServer = require('ws').Server;
-
-// Yes, SSL is required
-var serverConfig = {
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem'),
-};
 
 // ----------------------------------------------------------------------------------------
 
@@ -26,14 +18,13 @@ var handleRequest = function(request, response) {
     }
 };
 
-var httpsServer = https.createServer(serverConfig, handleRequest);
-//httpsServer.listen(HTTPS_PORT, '0.0.0.0');
-httpsServer.listen(process.env.PORT || 8443);
+var httpServer = http.createServer(handleRequest);
+httpServer.listen(process.env.PORT || 8443);
 
 // ----------------------------------------------------------------------------------------
 
 // Create a server for handling websocket calls
-var wss = new WebSocketServer({server: httpsServer});
+var wss = new WebSocketServer({server: httpServer});
 
 wss.on('connection', function(ws) {
     ws.on('message', function(message) {
@@ -49,4 +40,4 @@ wss.broadcast = function(data) {
     }
 };
 
-console.log('Server running. Visit https://localhost:' + process.env.PORT + ' in Firefox/Chrome (note the HTTPS; there is no HTTP -> HTTPS redirect!)');
+console.log('Server running. Visit http://localhost:' + process.env.PORT + ' in Firefox/Chrome!)');
