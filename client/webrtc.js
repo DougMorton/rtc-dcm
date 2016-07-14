@@ -2,6 +2,8 @@ var localVideo;
 var remoteVideo;
 var peerConnection;
 var uuid;
+var serverConnection;
+var HOST;
 
 var peerConnectionConfig = {
     'iceServers': [
@@ -18,8 +20,8 @@ function pageReady() {
 
     //serverConnection = new WebSocket('wss://' + window.location.hostname + ':5000');
     
-var HOST = location.origin.replace(/^http/, 'ws')
-var serverConnection = new WebSocket(HOST);
+    HOST = location.origin.replace(/^http/, 'ws');
+	serverConnection = new WebSocket(HOST);
     serverConnection.onmessage = gotMessageFromServer;
 
     var constraints = {
