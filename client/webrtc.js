@@ -12,10 +12,6 @@ var peerConnectionConfig = {
     ]
 };
 
-serverConnection.on("iceCandidate", function(iceCandidate){
-  peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
-});
-
 function pageReady() {
     console.log('pageReady');
     uuid = uuid();
@@ -28,6 +24,10 @@ function pageReady() {
     HOST = location.origin.replace(/^http/, 'ws');
 	serverConnection = new WebSocket(HOST);
     serverConnection.onmessage = gotMessageFromServer;
+
+serverConnection.on("iceCandidate", function(iceCandidate){
+  peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
+});
 
     var constraints = {
         video: true,
