@@ -26,7 +26,9 @@ var handleRequest = function(request, response) {
     }
 };
 
-var httpsServer = https.createServer(serverConfig, handleRequest);
+//var httpsServer = https.createServer(serverConfig, handleRequest);
+var httpsServer = https.createServer(handleRequest);
+
 //httpsServer.listen(HTTPS_PORT, '0.0.0.0');
 httpsServer.listen(process.env.PORT || 8443);
 
