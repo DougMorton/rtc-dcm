@@ -13,6 +13,7 @@ var peerConnectionConfig = {
 };
 
 function pageReady() {
+    console.log('pageReady');
     uuid = uuid();
 
     localVideo = document.getElementById('localVideo');
@@ -37,12 +38,14 @@ function pageReady() {
 }
 
 function getUserMediaSuccess(stream) {
+    console.log('getUserMediaSuccess');
     localStream = stream;
     localVideo.src = window.URL.createObjectURL(stream);
     localVideo.play();
 }
 
 function start(isCaller) {
+    console.log('start');
     peerConnection = new RTCPeerConnection(peerConnectionConfig);
     peerConnection.onicecandidate = gotIceCandidate;
     peerConnection.onaddstream = gotRemoteStream;
@@ -54,6 +57,7 @@ function start(isCaller) {
 }
 
 function gotMessageFromServer(message) {
+    console.log('gotMessageFromServer');
     if(!peerConnection) start(false);
 
     var signal = JSON.parse(message.data);
@@ -74,13 +78,14 @@ function gotMessageFromServer(message) {
 }
 
 function gotIceCandidate(event) {
+    console.log('gotIceCandidate');
     if(event.candidate != null) {
         serverConnection.send(JSON.stringify({'ice': event.candidate, 'uuid': uuid}));
     }
 }
 
 function createdDescription(description) {
-    console.log('got description');
+    console.log('createdDescription');
 
     peerConnection.setLocalDescription(description).then(function() {
         serverConnection.send(JSON.stringify({'sdp': peerConnection.localDescription, 'uuid': uuid}));
@@ -88,7 +93,7 @@ function createdDescription(description) {
 }
 
 function gotRemoteStream(event) {
-    console.log('got remote stream');
+    console.log('gotRemoteStream');
     remoteVideo.src = window.URL.createObjectURL(event.stream);
     remoteVideo.play();
 }
