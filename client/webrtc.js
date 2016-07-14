@@ -61,11 +61,13 @@ function gotMessageFromServer(message) {
     if(!peerConnection) start(false);
 
     var signal = JSON.parse(message.data);
+    console.log('gotMessageFromServer',message);
 
     // Ignore messages from ourself
     if(signal.uuid == uuid) return;
 
     if(signal.sdp) {
+    console.log('gotMessageFromServer - sdp',signal);
         peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(function() {
             // Only create answers in response to offers
             if(signal.sdp.type == 'offer') {
@@ -73,6 +75,7 @@ function gotMessageFromServer(message) {
             }
         }).catch(errorHandler);
     } else if(signal.ice) {
+    console.log('gotMessageFromServer- ice',signal);
         peerConnection.addIceCandidate(new RTCIceCandidate(signal.ice)).catch(errorHandler);
     }
 }
