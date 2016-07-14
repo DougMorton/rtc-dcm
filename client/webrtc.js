@@ -25,7 +25,7 @@ function pageReady() {
 	serverConnection = new WebSocket(HOST);
     serverConnection.onmessage = gotMessageFromServer;
 
-serverConnection.on("iceCandidate", function(iceCandidate){
+socket.on("iceCandidate", function(iceCandidate){
   peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
 });
 
