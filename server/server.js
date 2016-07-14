@@ -1,6 +1,7 @@
 var fs = require('fs');
 var http = require('http');
 var WebSocketServer = require('ws').Server;
+var THIS_PORT = process.env.PORT;
 
 // ----------------------------------------------------------------------------------------
 
@@ -15,14 +16,30 @@ var handleRequest = function(request, response) {
     } else if(request.url == '/webrtc.js') {
         response.writeHead(200, {'Content-Type': 'application/javascript'});
         response.end(fs.readFileSync('client/webrtc.js'));
+    } else if(request.url == '/favicon.ico') {
+        response.writeHead(200, {'Content-Type': 'application/javascript'});
+        response.end(fs.readFileSync('favicon.ico'));
     }
 };
 
 //var httpsServer = https.createServer(serverConfig, handleRequest);
 //httpsServer.listen(HTTPS_PORT, '0.0.0.0');
-
 var httpServer = http.createServer(handleRequest);
-httpServer.listen(process.env.PORT || 8443);
+httpServer.listen(THIS_PORT || 8443);
+
+/*
+httpServer.get('*',function(req,res,next) {
+	if (request.headers['x-forwarded-proto'] != 'https') {
+   		response.redirect ("https://" +
+                 request.hostname +
+                 THIS_PORT +
+                 request.originalUrl );
+        }
+	else
+		next()
+
+})*/
+
 
 // ----------------------------------------------------------------------------------------
 
@@ -43,4 +60,4 @@ wss.broadcast = function(data) {
     }
 };
 
-console.log('Server running. Visit http://localhost:' + process.env.PORT + ' in Firefox/Chrome!)');
+console.log('Server running. Visit http://localhost:' + THIS_PORT + ' in Firefox/Chrome!)');
