@@ -12,6 +12,10 @@ var peerConnectionConfig = {
     ]
 };
 
+serverConnection.on("iceCandidate", function(iceCandidate){
+  peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
+});
+
 function pageReady() {
     console.log('pageReady');
     uuid = uuid();
@@ -79,6 +83,10 @@ function gotMessageFromServer(message) {
 
 function gotIceCandidate(event) {
     console.log('gotIceCandidate');
+    
+    if (!event || !event.candidate) return;
+    serverConnection.emit("iceCandidate", event.candidate); //send ice candidate through your signaling server to other peer
+    
     if(event.candidate != null) {
         serverConnection.send(JSON.stringify({'ice': event.candidate, 'uuid': uuid}));
     }
