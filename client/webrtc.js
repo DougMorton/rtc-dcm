@@ -25,10 +25,6 @@ function pageReady() {
 	serverConnection = new WebSocket(HOST);
     serverConnection.onmessage = gotMessageFromServer;
 
-socket.on("iceCandidate", function(iceCandidate){
-  peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
-});
-
     var constraints = {
         video: true,
         audio: true,
